@@ -1,7 +1,7 @@
 import uuid
 
 import boto3
-from resize_images import resize_to_cover, resize_to_profile, resize_to_thumbnail
+from resizing import resize_to_cover, resize_to_profile, resize_to_thumbnail
 
 s3_client = boto3.client('s3')
 
