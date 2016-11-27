@@ -26,5 +26,5 @@ def handler(event, context):
                               'profile-{key}'.format(key=key))
 
         resize_to_thumbnail(download_path, upload_path_thumbnail)
-        s3_client.upload_file(upload_path_thumbnail, '{bucket_name}thumbnails'.format(bucket_name=bucket),
+        s3_client.upload_file(upload_path_thumbnail, '{bucket_name}thumbnail'.format(bucket_name=bucket),
                               'thumbnail-{key}'.format(key=key))

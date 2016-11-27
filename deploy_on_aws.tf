@@ -28,6 +28,38 @@ resource "aws_s3_bucket" "output_thumbnail" {
   acl = "private"
 }
 
+resource "aws_iam_policy" "bucket_access_policy" {
+  name = "bucket_access_policy"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${aws_s3_bucket.input.bucket}/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${aws_s3_bucket.output_cover.bucket}/*",
+        "arn:aws:s3:::${aws_s3_bucket.output_profile.bucket}/*",
+        "arn:aws:s3:::${aws_s3_bucket.output_thumbnail.bucket}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name = "iam_for_lambda"
   assume_role_policy = <<EOF
@@ -46,11 +78,17 @@ resource "aws_iam_role" "iam_for_lambda" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_role_policy_attachment" {
+  role = "${aws_iam_role.iam_for_lambda.name}"
+  policy_arn = "${aws_iam_policy.bucket_access_policy.arn}"
+}
+
 resource "aws_lambda_function" "image_resize" {
   filename = "image_resize.zip"
   function_name = "imageResize"
   handler = "image_resize.handler"
-  runtime = "python2.7"
+  runtime = "python2.7",
+  timeout = 10
   role = "${aws_iam_role.iam_for_lambda.arn}"
 }
 

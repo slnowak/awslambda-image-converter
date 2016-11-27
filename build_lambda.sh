@@ -8,6 +8,7 @@ source activate ${VIRTUAL_ENV}
 pip install -r ${AWS_LAMBDA_DIR}/Requirements
 
 WORKSPACE="build"
+rm -rf ${BUILD_FILE}
 mkdir ${WORKSPACE}
 cp -r ${VIRTUAL_ENV}/lib/python2.7/site-packages/* ${WORKSPACE}/
 cp ${AWS_LAMBDA_DIR}/*.py ${WORKSPACE}/
