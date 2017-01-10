@@ -1,11 +1,9 @@
 provider "aws" {
-  region = "us-east-1"
-  access_key = "yourkey"
-  secret_key = "yoursecret"
+  region = "eu-central-1"
 }
 
 variable "input_bucket" {
-  default = "snowakserverlessimages"
+  default = "kkulakimages"
 }
 
 resource "aws_s3_bucket" "input" {
@@ -29,7 +27,7 @@ resource "aws_s3_bucket" "output_thumbnail" {
 }
 
 resource "aws_iam_policy" "bucket_access_policy" {
-  name = "bucket_access_policy"
+  name = "lambda_access_policy"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -43,6 +41,13 @@ resource "aws_iam_policy" "bucket_access_policy" {
       "Resource": [
         "arn:aws:s3:::${aws_s3_bucket.input.bucket}/*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:*"
+      ],
+      "Resource": "arn:aws:logs:*:*:*"
     },
     {
       "Effect": "Allow",

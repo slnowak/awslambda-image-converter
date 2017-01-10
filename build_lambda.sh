@@ -4,7 +4,7 @@ AWS_LAMBDA_DIR="lambda"
 BUILD_FILE="image_resize.zip"
 
 virtualenv ${VIRTUAL_ENV}
-source activate ${VIRTUAL_ENV}
+source ${VIRTUAL_ENV}/bin/activate ${VIRTUAL_ENV}
 pip install -r ${AWS_LAMBDA_DIR}/Requirements
 
 WORKSPACE="build"
@@ -15,5 +15,5 @@ cp ${AWS_LAMBDA_DIR}/*.py ${WORKSPACE}/
 cd ${WORKSPACE} ; zip -r ../${BUILD_FILE} . * ; cd ..
 
 rm -rf ${WORKSPACE}
-source deactivate ${VIRTUAL_ENV}
+#deactivate ${VIRTUAL_ENV}
 rm -rf ${VIRTUAL_ENV}
